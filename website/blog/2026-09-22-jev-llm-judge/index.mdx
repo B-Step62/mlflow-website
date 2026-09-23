@@ -14,23 +14,6 @@ LLM judges help you evaluate answers, compare prompts, and catch regressions. Ev
 
 Can Jev distinguish correct MLflow answers from answers containing factual or API errors, and how does it compare with these LLM judges?
 
-<a
-  href={require("./judge-comparison.png").default}
-  target="_blank"
-  rel="noopener noreferrer"
-  title="Open chart at full size"
->
-  <img
-    src={require("./judge-comparison.png").default}
-    alt="Agreement with human labels, median latency, and estimated cost for Jev, GPT, Claude, and DeepSeek"
-    width={3687}
-    height={1228}
-    style={{ width: "100%", height: "auto" }}
-  />
-</a>
-
-_30 human-labeled QA examples. DeepSeek cost uses off-peak pricing._
-
 ## 1. What is Jev?
 
 Jev is a unique model that does not generate text. A conventional LLM generates its verdict token by token. Jev, by contrast, produces only structured outputs from a fixed set of options, along with decision probabilities. TypeSafe calls it a _System One_ model, borrowing the term from Daniel Kahneman's _Thinking, Fast and Slow_ for decisions made quickly rather than through deliberate reasoning. This narrower interface lets Jev respond with much lower latency, at the cost of general text generation. See [TypeSafe's launch post](https://typesafe.ai/blog/introducing-system-one-models-and-jev) for details.
@@ -52,7 +35,7 @@ We'll test Jev with the following LLM judge prompt: **is the answer factually an
 Install the packages and start an MLflow server:
 
 ```bash
-pip install mlflow typesafe-sdk
+uv pip install mlflow typesafe-sdk
 mlflow server --host 127.0.0.1 --port 5000
 ```
 
@@ -157,6 +140,23 @@ mlflow.genai.evaluate(data=data, scorers=[judge_answer])
 ```
 
 We also tested GPT-5.6 Terra and Luna, Claude Sonnet 4.6, Claude Opus 4.8, and DeepSeek-V4.1-Flash (`deepseek-flash`) the same inputs and correctness criterion. We explicitly disabled extended reasoning and limited output to 128 tokens, testing a configuration intended for quick pass/fail checks. Here is the result from the benchmark.
+
+<a
+  href={require("./judge-comparison.png").default}
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Open chart at full size"
+>
+  <img
+    src={require("./judge-comparison.png").default}
+    alt="Agreement with human labels, median latency, and estimated cost for Jev, GPT, Claude, and DeepSeek"
+    width={3687}
+    height={1228}
+    style={{ width: "100%", height: "auto" }}
+  />
+</a>
+
+_30 human-labeled QA examples. DeepSeek cost uses off-peak pricing._
 
 | Judge               | Agreement with human labels | Median latency | p95 latency | Estimated cost / 1,000 judgments |
 | ------------------- | --------------------------: | -------------: | ----------: | -------------------------------: |
