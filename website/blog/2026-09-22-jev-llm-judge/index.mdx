@@ -14,6 +14,23 @@ LLM judges help you evaluate answers, compare prompts, and catch regressions. Ev
 
 Can Jev distinguish correct MLflow answers from answers containing factual or API errors, and how does it compare with these LLM judges?
 
+<a
+  href={require("./judge-comparison.png").default}
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Open chart at full size"
+>
+  <img
+    src={require("./judge-comparison.png").default}
+    alt="Agreement with human labels, median latency, and estimated cost for Jev, GPT, Claude, and DeepSeek"
+    width={3687}
+    height={1228}
+    style={{ width: "100%", height: "auto" }}
+  />
+</a>
+
+_30 human-labeled QA examples. DeepSeek cost uses off-peak pricing._
+
 ## 1. What is Jev?
 
 Jev is a unique model that does not generate text. A conventional LLM generates its verdict token by token. Jev, by contrast, produces only structured outputs from a fixed set of options, along with decision probabilities. TypeSafe calls it a _System One_ model, borrowing the term from Daniel Kahneman's _Thinking, Fast and Slow_ for decisions made quickly rather than through deliberate reasoning. This narrower interface lets Jev respond with much lower latency, at the cost of general text generation. See [TypeSafe's launch post](https://typesafe.ai/blog/introducing-system-one-models-and-jev) for details.
