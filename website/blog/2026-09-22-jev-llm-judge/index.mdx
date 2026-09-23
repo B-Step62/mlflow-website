@@ -16,11 +16,9 @@ Can Jev distinguish correct MLflow answers from answers containing factual or AP
 
 ## 1. What is Jev?
 
-Jev is a unique model that does not generate texts. A conventional LLM generates its verdict token by token. On the other hand, Jev produces only structured outputs from fixed set of options with decision probabilities. TypeSafe calls this a *System One* model because (YUki: Add some short description here.). The architecture allows Jev to return the output in much lower latency, while aborting an ability to produce general text. See [their launch post] for learning more.
-
+Jev is a unique model that does not generate texts. A conventional LLM generates its verdict token by token. On the other hand, Jev produces only structured outputs from fixed set of options with decision probabilities. TypeSafe calls this a _System One_ model because (YUki: Add some short description here.). The architecture allows Jev to return the output in much lower latency, while aborting an ability to produce general text. See [their launch post] for learning more.
 
 For example, give Jev a question about an MLflow API, a candidate answer, and the relevant documentation, then ask whether the answer is factually and technically correct using a question. Jev's [Noul question type](https://docs.typesafe.ai/primitives/noul) returns the probability of "yes," which your code can turn into a pass or fail. It also supports selecting a category with **Choice** and grading against ordered rubric levels with **Score**.
-
 
 ## 2. Why Jev is a candidate for judging
 
@@ -29,7 +27,6 @@ Many evaluations need a small decision about a large input. Does an answer use t
 These tasks fit Jev's interface . You can also ask several independent questions about the same state in one request. Its [published price](https://docs.typesafe.ai/models) is $0.042 per million input tokens, with no charge for output tokens. That gives us a reason to test it for frequently repeated checks.
 
 One caveat is that LLM judges often produces **rationale** as well, because we want to understand why a particular answer is marked bad. Jev cannot support that, instead, can only produce probability alongside the classification output.
-
 
 ## 3. Define an LLM judge with Jev
 
@@ -138,21 +135,20 @@ Here is one of the incorrect answers for example:
 }
 ```
 
-
 ```python
 mlflow.genai.evaluate(data=data, scorers=[judge_answer])
 ```
 
 We also tested GPT-5.6 Terra and Luna, Claude Sonnet 4.6, Claude Opus 4.8, and DeepSeek-V4.1-Flash (`deepseek-flash`) the same inputs and correctness criterion. We explicitly disabled extended reasoning and limited output to 128 tokens, testing a configuration intended for quick pass/fail checks. Here is the result from the benchmark.
 
-| Judge | Agreement with human labels | Median latency | p95 latency | Estimated cost / 1,000 judgments |
-| --- | ---: | ---: | ---: | ---: |
-| Jev 1.13.0 | 30/30 (100%) | 369 ms | 411 ms | $0.0247 |
-| GPT-5.6 Terra | 30/30 (100%) | 1,091 ms | 1,924 ms | $0.8960 |
-| GPT-5.6 Luna | 30/30 (100%) | 947 ms | 1,435 ms | $0.0896 |
-| Claude Sonnet 4.6 | 27/30 (90.0%) | 1,610 ms | 3,546 ms | $1.6721 |
-| Claude Opus 4.8 | 28/30 (93.3%) | 1,966 ms | 9,279 ms | $3.7750 |
-| DeepSeek-V4.1-Flash | 29/30 (96.6%) | 910 ms | 1,188 ms | $0.0624 (off-peak) |
+| Judge               | Agreement with human labels | Median latency | p95 latency | Estimated cost / 1,000 judgments |
+| ------------------- | --------------------------: | -------------: | ----------: | -------------------------------: |
+| Jev 1.13.0          |                30/30 (100%) |         369 ms |      411 ms |                          $0.0247 |
+| GPT-5.6 Terra       |                30/30 (100%) |       1,091 ms |    1,924 ms |                          $0.8960 |
+| GPT-5.6 Luna        |                30/30 (100%) |         947 ms |    1,435 ms |                          $0.0896 |
+| Claude Sonnet 4.6   |               27/30 (90.0%) |       1,610 ms |    3,546 ms |                          $1.6721 |
+| Claude Opus 4.8     |               28/30 (93.3%) |       1,966 ms |    9,279 ms |                          $3.7750 |
+| DeepSeek-V4.1-Flash |               29/30 (96.6%) |         910 ms |    1,188 ms |               $0.0624 (off-peak) |
 
 Jev, Terra, and Luna made identical decisions on all 30 examples. Jev had the lowest estimated cost and observed latency. Sonnet rejected one correct answer and accepted two incorrect answers. Opus also rejected an answer that correctly described session and tracing metadata. DeepSeek accepted one incorrect answer about output recording, same one as Claude mistook.
 
