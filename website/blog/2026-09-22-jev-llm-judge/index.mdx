@@ -35,8 +35,8 @@ We'll test Jev with the following LLM judge prompt: **is the answer factually an
 Install the packages and start an MLflow server:
 
 ```bash
-uv pip install mlflow typesafe-sdk
-mlflow server --host 127.0.0.1 --port 5000
+uv add mlflow typesafe-sdk
+uv run mlflow server --host 127.0.0.1 --port 5000
 ```
 
 In the terminal where you'll run Python, configure the connection and your TypeSafe API key. Use one evaluation worker so requests run sequentially:
