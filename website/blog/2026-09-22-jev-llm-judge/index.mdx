@@ -16,7 +16,7 @@ Can Jev distinguish correct MLflow answers from answers containing factual or AP
 
 ## 1. What is Jev?
 
-Jev is a unique model that does not generate texts. A conventional LLM generates its verdict token by token. On the other hand, Jev produces only structured outputs from fixed set of options with decision probabilities. TypeSafe calls this a _System One_ model because (YUki: Add some short description here.). The architecture allows Jev to return the output in much lower latency, while aborting an ability to produce general text. See [their launch post] for learning more.
+Jev is a unique model that does not generate text. A conventional LLM generates its verdict token by token. Jev, by contrast, produces only structured outputs from a fixed set of options, along with decision probabilities. TypeSafe calls it a _System One_ model, borrowing the term from Daniel Kahneman's _Thinking, Fast and Slow_ for decisions made quickly rather than through deliberate reasoning. This narrower interface lets Jev respond with much lower latency, at the cost of general text generation. See [TypeSafe's launch post](https://typesafe.ai/blog/introducing-system-one-models-and-jev) for details.
 
 For example, give Jev a question about an MLflow API, a candidate answer, and the relevant documentation, then ask whether the answer is factually and technically correct using a question. Jev's [Noul question type](https://docs.typesafe.ai/primitives/noul) returns the probability of "yes," which your code can turn into a pass or fail. It also supports selecting a category with **Choice** and grading against ordered rubric levels with **Score**.
 
@@ -157,6 +157,8 @@ Jev, Terra, and Luna made identical decisions on all 30 examples. Jev had the lo
 For this dataset, Jev produced the compatible human-judge alignment score as Terra and Luna at lower cost and latency. Before adopting it, we still recommend collecting real answers and check the errors that matter to your application. Jev's probabilities also let you try sending uncertain cases to another evaluator.
 
 Also the limitation of the lack of rationale can be important for iterating on the judge result. For example, if you are iterating on the agent quality during development phase, using normal text-based models would still be better. However, when it comes to large scale evaluation like online production monitoring, Jev could be a great option to balance quality and cost. When Jev flagged some answers as bad, you can still run the same judge with more expensive LLMs to generate human-readable rationale.
+
+A binary Noul question also cannot abstain. When abstention matters, use a Choice question with an explicit `unsure` option, then route those cases to another judge or a human reviewer.
 
 ## 6. Try it on your evaluation dataset
 
