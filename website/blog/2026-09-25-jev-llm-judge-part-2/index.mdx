@@ -24,12 +24,24 @@ The incorrect answers included wrong API names, reversed source and target roles
 
 ## The mistakes Jev missed
 
-I ran the full dataset twice:
+I ran the full dataset twice. Jev agreed with human labels on 64/72 answers in each run; GPT-OSS-120B agreed on all 72.
 
-| Judge        | Run 1: agreement with human labels | Run 2: agreement with human labels |
-| ------------ | ---------------------------------: | ---------------------------------: |
-| Jev          |                      64/72 (88.9%) |                      64/72 (88.9%) |
-| GPT-OSS-120B |                       72/72 (100%) |                       72/72 (100%) |
+<a
+  href={require("./judge-performance.png").default}
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Open chart at full size"
+>
+  <img
+    src={require("./judge-performance.png").default}
+    alt="Jev and GPT-OSS-120B: agreement with human labels was 88.9% (64/72) and 100% (72/72); median latency was 0.20 and 1.44 seconds."
+    width={1600}
+    height={720}
+    style={{ width: "100%", height: "auto" }}
+  />
+</a>
+
+_Agreement was the same in both runs. Latency combines 144 judgments per model across the two runs._
 
 Jev scored 32/36 in each language in both runs. It accepted every correct answer, including the paraphrases, and caught errors such as a wrong retention period or a reversed yes/no conclusion.
 
